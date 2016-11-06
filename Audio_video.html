@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<title>Áudio e Vídeo</title>
+		<script type="text/javascript" src="js/jquery.js"></script>
+	</head>
+	<body>
+		<audio controls id="som">
+			<p>Seu navegador não tem suporte a Áudio HTML5</p>
+			<source id="musica" src="" type="audio/mp3">
+		</audio>
+		<div>
+			<input type="button" value="Stop" id="stopAudio" />
+			<input type="button" value="Play" id="playAudio" />
+			<input type="button" value="Pause" id="pauseAudio" />
+			<input type="button" value="Reiniciar" id="reiniciarAudio" />
+			<input type="button" value="Volume +" id="vMaisAudio" />
+			<input type="button" value="Volume -" id="vMenosAudio" />
+			<input type="button" value="Mudo" id="vMudoAudio" />
+			<input type="button" value="<<< Anterior" id="anteriorAudio" />
+			<input type="button" value="Proximo >>>" id="proximoAudio" />
+			<input type="hidden" id="atual" name="atual" value=""/>
+		</div>
+
+		<p>Playlist</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(0)" id="0"/> Someday - Nickelback</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(1)" id="1"/> Unforgiven II - Metallica</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(2)" id="2"/> Smells Like Tenn Spirit - Nirvana</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(3)" id="3"/> Whiskey on the Rocks - Ac/Dc</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(4)" id="4"/> Stricken - Disturbed</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(5)" id="5"/> Can't Stop - Red Hot Chili Peppers</p>
+		<p><input type="button" value="Play" onclick="tocarMusica(6)" id="6"/> New Divide - Linkin Park</p>
+
+		<script type="text/javascript">
+			//Pega o audio controlador
+			var ctrAudio = $('#som')[0];
+
+			//Array com as musicas da playlist
+			musicas = ['som1', 'som2', 'som3', 'som4', 'som5', 'som6', 'som7'];
+			var m = 0;
+			var mudo = 0;
+
+			//Função que carrega musica para execução
+			function tocarMusica(musica){
+				m = musica;
+				$('#musica').attr('src', ''+musicas[m]+'.mp3');
+				playMusica();
+			}
+
+			//Muda automaticamente ao terminar uma musica
+			$('#som').on('ended', function() {
+				if(musicas.length == m+1){
+					m = 0;	
+				}
+				else{
+					m++;
+				}
+				tocarMusica(m)
+			});
+
+			//Avança uma musica
+			$('#proximoAudio').click(function(){
+				if(musicas.length == m+1){
+					m = 0;
+				}
+				else{
+					m++;
+				}
+				tocarMusica(m);
+			});
+
+			//Retrocede uma música
+			$('#anteriorAudio').click(function(){
+				if(m != 0){
+					m--;
+				}		
+				tocarMusica(m);
+			});
+
+			//Função que executa a musica
+			function playMusica(){
+				ctrAudio.load();
+				ctrAudio.play();
+				ctrAudio.volume = 1;
+			}
+
+			//Executa a musica
+			$('#playAudio').click(function(){
+				ctrAudio.play();
+				ctrAudio.volume = 1;
+			});
+
+			//Pausa a musica
+			$('#pauseAudio').click(function(){
+				ctrAudio.pause();
+			});
+
+			//Para a execucao da musica
+			$('#stopAudio').click(function(){
+				ctrAudio.pause();
+				ctrAudio.currentTime = 0;
+			});
+
+			//Aumenta o volume
+			$('#vMaisAudio').click(function(){
+				if(ctrAudio.volume < 1){
+					ctrAudio.volume = ctrAudio.volume + 0.1;
+				}
+			});
+
+			//Diminui o volume
+			$('#vMenosAudio').click(function(){
+				ctrAudio.volume -= 0.1;
+			});
+
+			//Reimicia a musica
+			$('#reiniciarAudio').click(function(){
+				ctrAudio.currentTime = 0;
+				ctrAudio.play();
+				ctrAudio.volume = 1;
+			});
+
+			//Deixa o som mudo
+			$('#vMudoAudio').click(function(){
+				if(mudo == 0){
+					ctrAudio.volume = 0;
+					mudo = 1;
+				}
+				else{
+					ctrAudio.volume = 1;
+					mudo = 0;
+				}				
+			});			
+		</script>
+	</body>
+</html>
